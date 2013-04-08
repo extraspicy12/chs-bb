@@ -1,16 +1,4 @@
 brick-breaker-cs3
 =================
 
-Brick Breaker CS3
-
-Testaphalopogaous
-
-Cooliosis
-
-times dos
-
-matt's turn
-
-test
-
-test
+This is Matt Keimig's and Eric Segev's Brick Breaker Project for Computer Science III.
