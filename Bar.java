@@ -1,16 +1,11 @@
 import java.awt.*;
 
-//git add <filename>
-//git commit -m 'comment'
-//git push origin master
-//git push upstream master
-
 public class Bar extends Component{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int x;
 	private int yStart, y;
 	private int height = 20;
-	private int width = 150;
+	private int width = screenSize.width/8;
 	private double dx, angle;
 	private double convertedDX;
 	private final double mark05 = .05, mark1 = .1, mark2 = .2, mark3 = .3, mark4 = .4, mark5 = .5;

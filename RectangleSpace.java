@@ -20,6 +20,7 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 	private Color color;
 	private Dimension dim;
 	private Bar bar =  new Bar(minSize.width, minSize.height-100);
+	private Ball ball = new Ball(minSize.width/2, minSize.height-130);
 	private Timer timer;
 	private int mouseX;
 	
@@ -27,10 +28,9 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 		color = Color.WHITE;
 		setOpaque(true);
 		add(bar);
+		add(ball);
 		addMouseMotionListener(this);
 	    setBounds(0,0,screenSize.width, screenSize.height-100);
-	    timer = new Timer();
-	    timer.scheduleAtFixedRate(new ScheduleTask(), 10, 10);
 	}	
 	
     public Dimension getMinimumSize() {
@@ -64,7 +64,13 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 	class ScheduleTask extends TimerTask {
 
         public void run() {
-        	bar.move(mouseX-75);
+        	if (mouseX <= screenSize.width/16)
+        		bar.move(-10);
+        	else if (mouseX >= screenSize.width*(15.0/16.0))
+        		bar.move(screenSize.width-screenSize.width/8+10);
+        	else
+        		bar.move(mouseX-screenSize.width/16);
+        	ball.move();
         	repaint();
         }
     }
