@@ -4,7 +4,7 @@ public class Bar extends Component{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int x;
 	private int yStart, y;
-	private int height = 20;
+	private int height = screenSize.height/40;
 	private int width = screenSize.width/8;
 	private double dx, angle;
 	private double convertedDX;
