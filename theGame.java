@@ -11,7 +11,7 @@ import javax.swing.*;
 public class theGame extends JFrame{
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private Dimension minSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private boolean paused = false;
+	private boolean paused = true;
 	private JButton pause;
 	private Timer time = new Timer();
 	RectangleSpace space = new RectangleSpace();	
@@ -30,7 +30,7 @@ public class theGame extends JFrame{
 		
 		JMenu game = new JMenu("Game");
 		
-		pause = new JButton("Pause");
+		pause = new JButton("Start");
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				if(!paused){
@@ -69,9 +69,7 @@ public class theGame extends JFrame{
 		pack();
 	}
 
-	public static void main(String[] args){
-//		InvisiblePanel bigBrother = new InvisiblePanel();
-//		bigBrother.setVisible(true);
+	public static void main(String[] args){;
 		JFrame game = new theGame();
 		game.setVisible(true);
 
