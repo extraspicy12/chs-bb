@@ -43,6 +43,7 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		bar.paint(g);
+		ball.paint(g);
 	}
 
 	public void mouseDragged(MouseEvent e) {}
