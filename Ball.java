@@ -1,17 +1,17 @@
 import java.awt.*;
 
+//add commond and sprites?
+
 public class Ball extends Component{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int x;
-	private int yStart, y;
+	private int x, y, dx, dy;
 	private int diameter = 30;
-	private double dx, dy;
 	
 	public Ball(int xValue, int yValue){
-		x=xValue;
+		x = xValue;
 		y = yValue;
 		dx=0;
-		dy=0;
+		dy=1;
 	}
 	
 	public double getDX(){
@@ -30,10 +30,18 @@ public class Ball extends Component{
 		return x;
 	}
 	
-	public void setVelocity(double changeX, double changeY){
-		dx=changeX;
-		dy=changeY;
+	public void setDX(int xdirect){
+		dx = xdirect;
 	}
+	
+	public void setDY(int ydirect){
+		dy = ydirect;
+	}
+	
+//	private void setVelocity(double xmult, double ymult) {
+//		dx *= xmult;
+//		dy *= ymult;
+//	}
 	
 	public void move(){
 		x+=dx;
