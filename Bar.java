@@ -1,9 +1,10 @@
 import java.awt.*;
 
+//center the bar? fix default constructors
+
 public class Bar extends Component{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int x;
-	private int yStart, y;
+	private int x, y;
 	private int height = screenSize.height/40;
 	private int width = screenSize.width/8;
 	private double dx, angle;
@@ -13,10 +14,9 @@ public class Bar extends Component{
 
 	public Bar(int width, int height){
 		x = width/2;
-		yStart = height;
 		y = height;
 	}	
-	public void move(int newX){
+	public void move(int newX){ //fix and implement - maybe add rotation in a later version
 		convertedDX = (double)(newX-x)/(double)screenSize.width;
 		dx = (newX-x)/10;
 		if(convertedDX <= mark10){
@@ -45,13 +45,12 @@ public class Bar extends Component{
 			angle = 0;
 		}
 		x+=dx;
-
 	}
 	public void paint(Graphics block){
 		Graphics2D g2d = (Graphics2D)block;
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x, y, width, height);
-		g2d.rotate(angle);
+		//g2d.rotate(angle);
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, height);
