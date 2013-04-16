@@ -12,14 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class RectangleSpace extends JPanel implements MouseMotionListener{
-	
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	Dimension minSize = new Dimension(screenSize.width, screenSize.height-200);
-	
+public class RectangleSpace extends JPanel implements Commons, MouseMotionListener{
 	private Color color;
 	private Dimension dim;
-	private Bar bar =  new Bar(minSize.width, minSize.height-100);
+	private Bar bar =  new Bar();
 	private Ball ball = new Ball((bar.getX()+bar.getWidth())/2, (bar.getY()+bar.getHeight())/2);
 	private Timer timer;
 	private int mouseX;
@@ -33,13 +29,6 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 	    setBounds(0,0,screenSize.width, screenSize.height-100);
 	}	
 	
-    public Dimension getMinimumSize() {
-        return minSize;
-    }
- 
-    public Dimension getPreferredSize() {
-        return minSize;
-    }
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		bar.paint(g);
@@ -59,7 +48,7 @@ public class RectangleSpace extends JPanel implements MouseMotionListener{
 	
 	public void unPause(){
 		timer = new Timer();
-	    timer.scheduleAtFixedRate(new ScheduleTask(), 10, 100);
+	    timer.scheduleAtFixedRate(new ScheduleTask(), 10, 10);
 	}
 	
 	class ScheduleTask extends TimerTask {

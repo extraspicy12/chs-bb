@@ -8,11 +8,11 @@ import java.awt.*;
 
 //mimic move from breakout - then make more advanced and add checkcollision into rectspace
 
-public class Ball extends Component{
+public class Ball extends Component implements Commons{
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int x, y;
 	private double dx, dy;
-	private int diameter = 30;
+	private int diameter = Commons.WIDTH/50;
 	Color color = Color.BLUE;
 
 	public Ball(int xValue, int yValue){

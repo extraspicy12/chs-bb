@@ -2,23 +2,24 @@ import java.awt.*;
 
 //center the bar? fix default constructors
 
-public class Bar extends Component{
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int x, y;
-	private int height = screenSize.height/40;
-	private int width = screenSize.width/8;
-	private double dx, angle;
-	private double convertedDX;
+public class Bar extends Sprite implements Commons{
+	private int dx, changeX, convertedDX, angle;
 	private final double mark05 = .05, mark1 = .1, mark2 = .2, mark3 = .3, mark4 = .4, mark5 = .5;
 	private final double mark6 = .6, mark7 = .7, mark8 = .8, mark9 = .9, mark10 = 1.0;
 
-	public Bar(int width, int height){
-		x = width/2;
-		y = height;
+	public Bar(){
+		x = Commons.WIDTH/2 - width/2;
+		y = Commons.HEIGHT - Commons.HEIGHT/20;
+		height = Commons.HEIGHT/40;
+		width = Commons.WIDTH/8;
 	}	
 	public void move(int newX){ //fix and implement - maybe add rotation in a later version
-		convertedDX = (double)(newX-x)/(double)screenSize.width;
-		dx = (newX-x)/10;
+		convertedDX = (newX-x)/Commons.WIDTH; //percentage of screen moved
+		changeX = newX - x;
+		if (Math.abs(changeX) < 10 && changeX != 0)
+			dx = 1*(changeX/Math.abs(changeX));
+		else
+			dx = changeX/10;
 		if(convertedDX <= mark10){
 			angle = 90;
 		}else if(convertedDX < mark9){
@@ -51,11 +52,5 @@ public class Bar extends Component{
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x, y, width, height);
 		//g2d.rotate(angle);
-	}
-	public Rectangle getRect() {
-		return new Rectangle(x, y, width, height);
-	}
-	public int getX(){
-		return x;
 	}
 }
