@@ -1,6 +1,4 @@
 import java.awt.Component;
-import java.awt.Image;
-import java.awt.Rectangle;
 
 public class Sprite extends Component{
 
@@ -8,8 +6,6 @@ public class Sprite extends Component{
     protected int y;
     protected int width;
     protected int height;
-    protected Image image;
-
 
     public void setX(int x) {
         this.x = x;
@@ -33,16 +29,5 @@ public class Sprite extends Component{
 
     public int getHeight() {
         return height;
-    }
-
-    Image getImage()
-    {
-      return image;
-    }
-
-    Rectangle getRect()
-    {
-      return new Rectangle(x, y, 
-          image.getWidth(null), image.getHeight(null));
     }
 }

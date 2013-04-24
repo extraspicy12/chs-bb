@@ -9,11 +9,8 @@ import javax.swing.*;
 
 
 public class theGame extends JFrame{
-	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private Dimension minSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private boolean paused = true;
 	private JButton pause;
-	private Timer time = new Timer();
 	RectangleSpace space = new RectangleSpace();	
 	
 	public theGame(){
@@ -88,11 +85,11 @@ public class theGame extends JFrame{
 	}
 	
 	public Dimension getMinimumSize() {
-        return minSize;
+        return Commons.screenSize;
     }
  
     public Dimension getPreferredSize() {
-        return minSize;
+        return Commons.screenSize;
     }
 
 }

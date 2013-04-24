@@ -2,63 +2,79 @@ import java.awt.*;
 
 //add commons
 //add center to ball constructor and on resetstate
+//add variable for ball to be stuck to bar in next modification
 //also add resetstate to bar
 
 //call setDX and setDY in run method of bar or during collision check
 
 //mimic move from breakout - then make more advanced and add checkcollision into rectspace
 
-public class Ball extends Component implements Commons{
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	private int x, y;
-	private double dx, dy;
+public class Ball extends Sprite implements Commons{
+	private int xdir, ydir, xmult, ymult;
 	private int diameter = Commons.WIDTH/50;
 	Color color = Color.BLUE;
 
-	public Ball(int xValue, int yValue){
-		x = xValue;
-		y = yValue;
-		dx = 1;
-		dy = 0;
-	}
-
-	public int getY(){
-		return y;
-	}
-
-	public int getX(){
-		return x;
+	public Ball(Bar bar){
+		width = diameter;
+		height = diameter;
+		x = bar.getX()+bar.getWidth()/2-Commons.WIDTH/100;
+		y = bar.getY()-bar.getHeight();
+		//bar.getY()-bar.getHeight()/2-Commons.WIDTH/100
+		xdir = 1;
+		xmult = 10;
+		ydir = -1;
+		ymult = 10;
 	}
 	
-	public double getDX(){
-		return dx;
+	//using to test
+	public int getCenter(){
+		return x + width/2;
+	}
+	
+	public void setColor(Color color){
+		this.color = color;
+	}
+	
+	public double getXDir(){
+		return xdir;
 	}
 
-	public double getDY(){
-		return dy;
+	public double getYDir(){
+		return ydir;
 	}
 
-	public void setDX(int xdirect){
-		dx = xdirect;
+	public void setXDir(int xdirect){
+		xdir = xdirect;
 	}
 
-	public void setDY(int ydirect){
-		dy = ydirect;
+	public void setYDir(int ydirect){
+		ydir = ydirect;
+	}
+	
+	public double getXMult(){
+		return xmult;
 	}
 
-	//	private void setVelocity(double xmult, double ymult) {
-	//		dx *= xmult;
-	//		dy *= ymult;
-	//	}
-
-	public void move(){
-		x+=dx;
-		y+=dy;
+	public double getYMult(){
+		return ymult;
 	}
 
-	public void resetState() {
-		x = 230;
-		y = 355;
+	public void setXMult(int xmultip) {
+		xmult = Math.abs(xmultip);
+	}
+
+	public void setYMult(int ymultip) {
+		ymult = Math.abs(ymultip);
+	}
+	
+	public void move() {
+	      x += xdir*xmult;
+	      y += ydir*ymult;
+	    }
+
+	public void resetState(Bar bar) {
+		x = bar.getX()+bar.getWidth()/2-Commons.WIDTH/100;
+		y = bar.getY()-bar.getHeight()/2-Commons.WIDTH/100;
 	}
 
 	public void paint (Graphics g){
