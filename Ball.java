@@ -12,6 +12,8 @@ import java.awt.*;
 public class Ball extends Sprite implements Commons{
 	private int xdir, ydir, xmult, ymult;
 	private int diameter = Commons.WIDTH/50;
+	public static final int DEFAULT_XMULT = 7, DEFAULT_YMULT=10;
+	
 	Color color = Color.BLUE;
 
 	public Ball(Bar bar){
@@ -21,9 +23,9 @@ public class Ball extends Sprite implements Commons{
 		y = bar.getY()-bar.getHeight();
 		//bar.getY()-bar.getHeight()/2-Commons.WIDTH/100
 		xdir = 1;
-		xmult = 10;
+		xmult = DEFAULT_XMULT;
 		ydir = -1;
-		ymult = 10;
+		ymult = DEFAULT_YMULT;
 	}
 	
 	//using to test
@@ -75,8 +77,14 @@ public class Ball extends Sprite implements Commons{
 	public void resetState(Bar bar) {
 		x = bar.getX()+bar.getWidth()/2-Commons.WIDTH/100;
 		y = bar.getY()-bar.getHeight()/2-Commons.WIDTH/100;
+		xmult = DEFAULT_XMULT;
+		ymult = DEFAULT_YMULT;
 	}
 
+	public void setPosition(int xPos){
+		x=xPos;
+	}
+	
 	public void paint (Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(color);
