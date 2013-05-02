@@ -116,19 +116,22 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		else
 			newGame();
 	}
-	
-private void newGame(){
-	
-	
-}
-	
+		
+	private void newGame(){
+		lives = 3;
+		lifeCounter.setText( "Lives: "+lives);
+		ball.resetState(bar);
+		pause();
+		pause.setText("Start");
+	}
+		
 	private void resetGame(){
 		ball.resetState(bar);
 		loseALife();
 		stick = true;
 		lifeCounter.setText("  Lives: " + lives);
-		paused = true;
 		pause.setText("Restart");
+		pause();
 	}
 	
 	public void mouseDragged(MouseEvent e) {}
