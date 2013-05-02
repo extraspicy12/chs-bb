@@ -11,7 +11,7 @@ public class Bar extends Sprite implements Commons{
 		height = Commons.HEIGHT/40;
 		width = Commons.WIDTH/8;
 		x = Commons.WIDTH/2 - width/2;
-		y = Commons.HEIGHT - Commons.HEIGHT/20;
+		y = Commons.HEIGHT - Commons.HEIGHT/10;
 	}	
 	public void move(int newX){ //fix and implement - maybe add rotation in a later version
 		convertedDX = (newX-x)/Commons.WIDTH; //percentage of screen moved
