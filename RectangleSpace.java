@@ -36,7 +36,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private boolean paused = true;
 	private JButton pause;
 	private JMenuBar menu = new JMenuBar();
-	private JLabel lifeCounter;
+	private JLabel lifeCounter, barD = new JLabel("    " + 0);
 	private ArrayList<Brick> bricks;
 	
 	public RectangleSpace(JMenuBar menubar){
@@ -88,9 +88,9 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
-
-
-
+		
+		menubar.add(barD);
+		
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -197,30 +197,72 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	}
 	
 	private void setBallMults(int col){
-		System.out.println(col);
-		if(col <= 10 || col >= 110){
-			ball.setXMult(12);
-			ball.setYMult(2);
-		}
-		if(col <= 20 || col >= 100){
+		barD.setText("     " + col);
+		if(col <= bar.getWidth()/10){
 			ball.setXMult(11);
 			ball.setYMult(4);
+			ball.setXDir(-1);
+			barD.setText("     " + 11 + 4 + 1);
 		}
-		if(col <= 30 || col >= 90){
+		if(col <= 2*(bar.getWidth()/10)){
+			ball.setXMult(10);
+			ball.setYMult(7);
+			ball.setXDir(-1);
+			barD.setText("     " + 10 + 7 + 1);
+		}
+		if(col <= 3*(bar.getWidth()/10)){
 			ball.setXMult(9);
 			ball.setYMult(8);
+			ball.setXDir(1);
+			barD.setText("     " + 9 + 8 + 1);
 		}
-		if(col <= 40 || col >= 80){
-			ball.setXMult(8);
-			ball.setYMult(9);
+		if(col <= 4*(bar.getWidth()/10)){
+			ball.setXMult(7);
+			ball.setYMult(10);
+			ball.setXDir(1);
+			barD.setText("     " + 7 + 10 + 1);
 		}
-		if(col <= 50 || col >= 70){
+		if(col <= 5*(bar.getWidth()/10)){
+			ball.setXMult(4);
+			ball.setYMult(11);
+			ball.setXDir(1);
+			barD.setText("     " + 4 + 11 + 1);
+		}
+		if(col <= 6*(bar.getWidth()/10)){
+			ball.setXMult(4);
+			ball.setYMult(11);
+			ball.setXDir(-1);
+			barD.setText("     " + 4 + 11 + -1);
+		}
+		if(col <= 7*(bar.getWidth()/10)){
+			ball.setXMult(7);
+			ball.setYMult(10);
+			ball.setXDir(-1);
+			barD.setText("     " + 7 + 10 + -1);
+		}
+		if(col <= 8*(bar.getWidth()/10)){
+			ball.setXMult(9);
+			ball.setYMult(8);
+			ball.setXDir(-1);
+			barD.setText("     " + 9 + 8 + -1);
+		}
+		if(col <= 9*(bar.getWidth()/10)){
+			ball.setXMult(10);
+			ball.setYMult(7);
+			ball.setXDir(-1);
+			barD.setText("     " + 10 + 7 + -1);
+		}
+		if(col <= 10*(bar.getWidth()/10)){
 			ball.setXMult(11);
 			ball.setYMult(4);
+			ball.setXDir(-1);
+			barD.setText("     " + 11 + 4 + -1);
 		}
+		
 		else{
-			ball.setXMult(2);
-			ball.setYMult(12);
+			ball.setXMult(7);
+			ball.setYMult(10);
+			System.out.println("I have failed you, father");
 		}		
 	}
 

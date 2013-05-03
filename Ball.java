@@ -80,6 +80,7 @@ public class Ball extends Sprite implements Commons{
 		xmult = DEFAULT_XMULT;
 		ymult = DEFAULT_YMULT;
 		ydir=-1;
+		
 	}
 
 	public void setPosition(int xPos){
