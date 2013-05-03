@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,14 +36,16 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private boolean paused = true;
 	private JButton pause;
 	private JMenuBar menu = new JMenuBar();
-	JLabel lifeCounter;
+	private JLabel lifeCounter;
+	private ArrayList<Brick> bricks;
+	
 	public RectangleSpace(JMenuBar menubar){
 		setLayout(new BorderLayout());
 		menu = menubar;
-		
+
 
 		JMenu game = new JMenu("Game");		
-		
+
 		pause = new JButton("Start");
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -58,7 +61,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				}
 			}
 		});
-		
+
 		JMenuItem newGame = new JMenuItem("New Game");
 		newGame.setToolTipText("Create a new game");
 		newGame.addActionListener(new ActionListener() {
@@ -66,7 +69,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				newGame();
 			}
 		});
-		
+
 		JMenuItem exit = new JMenuItem("Exit");
 		exit.setToolTipText("Exit game");
 		exit.addActionListener(new ActionListener() {
@@ -74,20 +77,20 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				System.exit(0);
 			}
 		});
-		
 
-		
+
+
 		game.add(newGame);
 		game.add(exit);
-			
+
 		menubar.add(game);
 		menubar.add(pause);
-		
+
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
-		
-		
-		
+
+
+
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -95,79 +98,84 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		add(bar);
 		add(ball);
 		addMouseMotionListener(this);
-	    setBounds(0,0, Commons.WIDTH, Commons.HEIGHT-100);
-	    
-	    add(menu, BorderLayout.NORTH);
+		setBounds(0,0, Commons.WIDTH, Commons.HEIGHT-100);
+
+		add(menu, BorderLayout.NORTH);
+		
+		
+		bricks = new ArrayList<Brick>();
+		Brick brick1 = new Brick(23, 57, Color.RED);
+		add(brick1);
+		bricks.add(brick1);
+		
+		
 	}	
-	
+
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		bar.paint(g);
 		ball.paint(g);
+		for(Brick b : bricks){
+			b.paint(g);
+		}
 	}
 
 	public int getLives(){
 		return lives;
 	}
-	
+
 	private void loseALife(){
 		if (lives >= 1)
 			lives--;
 		else
 			newGame();
 	}
-	
-private void newGame(){
-	
-	
-}
-	
+
+	private void newGame(){
+		lives = 3;
+		lifeCounter.setText("  Lives: " + lives);
+		ball.resetState(bar);
+		pause();
+		pause.setText("Start");
+		//clear score too 
+		//remake bricks
+	}	
+
 	private void resetGame(){
 		ball.resetState(bar);
-		loseALife();
 		stick = true;
-		lifeCounter.setText("  Lives: " + lives);
-		paused = true;
 		pause.setText("Restart");
+		loseALife();
+		lifeCounter.setText("  Lives: " + lives);
+		pause();
 	}
-	
+
 	public void mouseDragged(MouseEvent e) {}
 
 
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 	}
-	
+
 	public void pause(){
 		timer.cancel();
 		paused = true;
 	}
-	
+
 	public void unPause(){
 		timer = new Timer();
-	    timer.scheduleAtFixedRate(new ScheduleTask(), 10, 10);
-	    paused = false;
-	    stick = false;
+		timer.scheduleAtFixedRate(new ScheduleTask(), 10, 10);
+		paused = false;
+		stick = false;
 	}
-	
+
 	public boolean isGameOver(){
 		return gameOver;
 	}
-	
+
 	public void checkCollision() {
 		if (ball.getY() > Commons.BOTTOM - Commons.WIDTH/50) {
-//			Random randomGenerator = new Random();
-//			int red = randomGenerator.nextInt(255);
-//			int green = randomGenerator.nextInt(255);
-//			int blue = randomGenerator.nextInt(255);
-//
-//			Color randomColour = new Color(red,green,blue);
-//			ball.setColor(randomColour);
-	
-			resetGame();
-			
-			
-			
+			resetGame();	
 		}
 		if (ball.getX() <= 0) {
 			ball.setXDir(1);
@@ -178,64 +186,93 @@ private void newGame(){
 		if (ball.getY() <= 0) {
 			ball.setYDir(1);
 		}  
-		
+
 		if (ball.getY()>=bar.getY()-bar.getHeight() && (ball.getCenter() > bar.getX() && ball.getCenter() < bar.getX() + bar.getWidth())) {
 			ball.setYDir(-1);
+			setBallMults(Math.abs(bar.getX()-ball.getX()));
 		}
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
 
 	}
 	
+	private void setBallMults(int col){
+		System.out.println(col);
+		if(col <= 10 || col >= 110){
+			ball.setXMult(12);
+			ball.setYMult(2);
+		}
+		if(col <= 20 || col >= 100){
+			ball.setXMult(11);
+			ball.setYMult(4);
+		}
+		if(col <= 30 || col >= 90){
+			ball.setXMult(9);
+			ball.setYMult(8);
+		}
+		if(col <= 40 || col >= 80){
+			ball.setXMult(8);
+			ball.setYMult(9);
+		}
+		if(col <= 50 || col >= 70){
+			ball.setXMult(11);
+			ball.setYMult(4);
+		}
+		else{
+			ball.setXMult(2);
+			ball.setYMult(12);
+		}		
+	}
+
 	class ScheduleTask extends TimerTask {
 
-        public void run() {
-        	if (mouseX <= Commons.WIDTH/16)
-        		bar.move(0);
-        	else if (mouseX >= Commons.WIDTH*(15.0/16.0))
-        		bar.move(Commons.WIDTH-Commons.WIDTH/8);
-        	else
-        		bar.move(mouseX-Commons.WIDTH/16);
-        	checkCollision();
-        	if(stick){
-        		ball.setPosition(bar.getX()+bar.getWidth()/2-Commons.WIDTH/100);
-        	}
-        	else
-        		ball.move();
-        	repaint();
-        }
-    }
+		public void run() {
+			if (mouseX <= Commons.WIDTH/16)
+				bar.move(0);
+			else if (mouseX >= Commons.WIDTH*(15.0/16.0))
+				bar.move(Commons.WIDTH-Commons.WIDTH/8);
+			else
+				bar.move(mouseX-Commons.WIDTH/16);
+			checkCollision();
+			if(stick){
+				ball.setPosition(bar.getX()+bar.getWidth()/2-Commons.WIDTH/100);
+			}
+			else
+				ball.move();
+			repaint();
+		}
+	}
 
 	public void mouseClicked(MouseEvent e) {//figure this out
 		if(stick){
 			unPause();
 			stick=false;
 		}
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

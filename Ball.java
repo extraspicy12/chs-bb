@@ -79,6 +79,7 @@ public class Ball extends Sprite implements Commons{
 		y = bar.getY()-bar.getHeight()/2-Commons.WIDTH/100;
 		xmult = DEFAULT_XMULT;
 		ymult = DEFAULT_YMULT;
+		ydir=-1;
 	}
 
 	public void setPosition(int xPos){

@@ -6,4 +6,5 @@ public interface Commons {
     public static final int WIDTH = screenSize.width;
     public static final int HEIGHT = screenSize.height;
     public static final int BOTTOM = HEIGHT;
+    
 }
