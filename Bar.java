@@ -56,4 +56,7 @@ public class Bar extends Sprite implements Commons{
 		g2d.fillRect(x, y, width, height);
 		//g2d.rotate(angle);
 	}
+	public Rectangle getRect() {
+		return new Rectangle(x, y, width, height);
+	}
 }

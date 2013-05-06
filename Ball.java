@@ -92,4 +92,8 @@ public class Ball extends Sprite implements Commons{
 		g2d.setColor(color);
 		g2d.fillOval(x,y,diameter,diameter);
 	}
+	
+	public Rectangle getRect(){
+		return new Rectangle(x,y,diameter,diameter);
+	}
 }

@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 //use commons to set size
 
 
-public class RectangleSpace extends JPanel implements Commons, MouseMotionListener, MouseListener{
+public class RectangleSpace extends JPanel implements Commons, MouseMotionListener {
 	private Color color;
 	private Dimension dim;
 	private Bar bar;
@@ -188,80 +188,79 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 		if (ball.getY()>=bar.getY()-bar.getHeight() && (ball.getCenter() > bar.getX() && ball.getCenter() < bar.getX() + bar.getWidth())) {
 			ball.setYDir(-1);
-			setBallMults(Math.abs(bar.getX()-ball.getX()));
+			setBallMults((int)bar.getRect().getMinX(), (int)ball.getRect().getMinX());
 		}
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
 
 	}
 	
-	private void setBallMults(int col){
-		barD.setText("     " + col);
+	private void setBallMults(int RectX, int BarX){
+		barD.setText("     " + RectX + "   " + BarX + "   " + bar.getWidth());
+		int col = BarX-RectX;
 		if(col <= bar.getWidth()/10){
 			ball.setXMult(11);
 			ball.setYMult(4);
 			ball.setXDir(-1);
-			barD.setText("     " + 11 + 4 + 1);
+
 		}
-		if(col <= 2*(bar.getWidth()/10)){
+		else if(col <= 2*(bar.getWidth()/10)){
 			ball.setXMult(10);
 			ball.setYMult(7);
 			ball.setXDir(-1);
-			barD.setText("     " + 10 + 7 + 1);
+
 		}
-		if(col <= 3*(bar.getWidth()/10)){
-			ball.setXMult(9);
-			ball.setYMult(8);
-			ball.setXDir(1);
-			barD.setText("     " + 9 + 8 + 1);
-		}
-		if(col <= 4*(bar.getWidth()/10)){
-			ball.setXMult(7);
-			ball.setYMult(10);
-			ball.setXDir(1);
-			barD.setText("     " + 7 + 10 + 1);
-		}
-		if(col <= 5*(bar.getWidth()/10)){
-			ball.setXMult(4);
-			ball.setYMult(11);
-			ball.setXDir(1);
-			barD.setText("     " + 4 + 11 + 1);
-		}
-		if(col <= 6*(bar.getWidth()/10)){
-			ball.setXMult(4);
-			ball.setYMult(11);
-			ball.setXDir(-1);
-			barD.setText("     " + 4 + 11 + -1);
-		}
-		if(col <= 7*(bar.getWidth()/10)){
-			ball.setXMult(7);
-			ball.setYMult(10);
-			ball.setXDir(-1);
-			barD.setText("     " + 7 + 10 + -1);
-		}
-		if(col <= 8*(bar.getWidth()/10)){
+		else if(col <= 3*(bar.getWidth()/10)){
 			ball.setXMult(9);
 			ball.setYMult(8);
 			ball.setXDir(-1);
-			barD.setText("     " + 9 + 8 + -1);
+
 		}
-		if(col <= 9*(bar.getWidth()/10)){
+		else if(col <= 4*(bar.getWidth()/10)){
+			ball.setXMult(7);
+			ball.setYMult(10);
+			ball.setXDir(-1);
+
+		}
+		else if(col <= 5*(bar.getWidth()/10)){
+			ball.setXMult(4);
+			ball.setYMult(11);
+			ball.setXDir(-1);
+
+		}
+		else if(col <= 6*(bar.getWidth()/10)){
+			ball.setXMult(4);
+			ball.setYMult(11);
+			ball.setXDir(1);
+		}
+		else if(col <= 7*(bar.getWidth()/10)){
+			ball.setXMult(7);
+			ball.setYMult(10);
+			ball.setXDir(1);
+
+		}
+		else if(col <= 8*(bar.getWidth()/10)){
+			ball.setXMult(9);
+			ball.setYMult(8);
+			ball.setXDir(1);
+
+		}
+		else if(col <= 9*(bar.getWidth()/10)){
 			ball.setXMult(10);
 			ball.setYMult(7);
-			ball.setXDir(-1);
-			barD.setText("     " + 10 + 7 + -1);
+			ball.setXDir(1);
+
 		}
-		if(col <= 10*(bar.getWidth()/10)){
+		else if(col <= bar.getWidth()){
 			ball.setXMult(11);
 			ball.setYMult(4);
-			ball.setXDir(-1);
-			barD.setText("     " + 11 + 4 + -1);
+			ball.setXDir(1);
+
 		}
 		
 		else{
 			ball.setXMult(7);
 			ball.setYMult(10);
-			System.out.println("I have failed you, father");
 		}		
 	}
 
@@ -282,38 +281,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				ball.move();
 			repaint();
 		}
-	}
-
-	public void mouseClicked(MouseEvent e) {//figure this out
-		if(stick){
-			unPause();
-			stick=false;
-		}
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
