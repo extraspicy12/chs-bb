@@ -140,7 +140,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		//clear score too 
 		//remake bricks
 	}	
-
 	private void resetGame(){
 		ball.resetState(bar);
 		stick = true;
