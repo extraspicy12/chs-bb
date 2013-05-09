@@ -9,7 +9,7 @@ public class Brick extends Sprite implements Commons {
 	private Color BrickColor;
 	
 	public Brick(int xPos, int yPos, Color color){
-		height = Commons.HEIGHT/35;
+		height = Commons.HEIGHT/25;
 		width = Commons.WIDTH/10;
 		x = xPos;
 		y = yPos;

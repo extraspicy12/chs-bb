@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 //use commons to set size
 
 
-public class RectangleSpace extends JPanel implements Commons, MouseMotionListener, MouseListener{
+public class RectangleSpace extends JPanel implements Commons, MouseMotionListener {
 	private Color color;
 	private Dimension dim;
 	private Bar bar;
@@ -38,7 +38,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private JMenuBar menu = new JMenuBar();
 	private JLabel lifeCounter, barD = new JLabel("    " + 0);
 	private ArrayList<Brick> bricks;
-	
+
 	public RectangleSpace(JMenuBar menubar){
 		setLayout(new BorderLayout());
 		menu = menubar;
@@ -88,9 +88,9 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
-		
+
 		menubar.add(barD);
-		
+
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -101,14 +101,14 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		setBounds(0,0, Commons.WIDTH, Commons.HEIGHT-100);
 
 		add(menu, BorderLayout.NORTH);
-		
-		
+
+
 		bricks = new ArrayList<Brick>();
 		Brick brick1 = new Brick(23, 57, Color.RED);
 		add(brick1);
 		bricks.add(brick1);
-		
-		
+
+
 	}	
 
 	public void paintComponent(Graphics g){
@@ -193,7 +193,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		//compare x and y coords and width/radius to see if intersecting
 
 	}
-	
+
 	private void setBallMults(int col){
 		barD.setText("     " + col);
 		ball.setYDir(-1);
@@ -212,20 +212,20 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		else if(col <= 3*(bar.getWidth()/10)){
 			ball.setXMult(9);
 			ball.setYMult(8);
-			ball.setXDir(1);
-			barD.setText("     " + 9 + 8 + 1);
+			ball.setXDir(-1);
+
 		}
 		else if(col <= 4*(bar.getWidth()/10)){
 			ball.setXMult(7);
 			ball.setYMult(10);
-			ball.setXDir(1);
-			barD.setText("     " + 7 + 10 + 1);
+			ball.setXDir(-1);
+
 		}
 		else if(col <= 4.5*(bar.getWidth()/10)){
 			ball.setXMult(4);
 			ball.setYMult(11);
-			ball.setXDir(1);
-			barD.setText("     " + 4 + 11 + 1);
+			ball.setXDir(-1);
+
 		}
 		else if(col <= 5.5*(bar.getWidth()/10)){
 			ball.setXMult(0);
@@ -236,26 +236,25 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		else if(col <= 6*(bar.getWidth()/10)){
 			ball.setXMult(4);
 			ball.setYMult(11);
-			ball.setXDir(-1);
-			barD.setText("     " + 4 + 11 + -1);
+			ball.setXDir(1);
 		}
 		else if(col <= 7*(bar.getWidth()/10)){
 			ball.setXMult(7);
 			ball.setYMult(10);
-			ball.setXDir(-1);
-			barD.setText("     " + 7 + 10 + -1);
+			ball.setXDir(1);
+
 		}
 		else if(col <= 8*(bar.getWidth()/10)){
 			ball.setXMult(9);
 			ball.setYMult(8);
-			ball.setXDir(-1);
-			barD.setText("     " + 9 + 8 + -1);
+			ball.setXDir(1);
+
 		}
 		else if(col <= 9*(bar.getWidth()/10)){
 			ball.setXMult(10);
 			ball.setYMult(7);
-			ball.setXDir(-1);
-			barD.setText("     " + 10 + 7 + -1);
+			ball.setXDir(1);
+
 		}
 		else if(col <= 10*(bar.getWidth()/10)){
 			ball.setXMult(11);
@@ -265,7 +264,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		} else{
 			ball.setXMult(7);
 			ball.setYMult(10);
-			System.out.println("I have failed you, father");
 		}		
 	}
 
@@ -286,38 +284,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				ball.move();
 			repaint();
 		}
-	}
-
-	public void mouseClicked(MouseEvent e) {//figure this out
-		if(stick){
-			unPause();
-			stick=false;
-		}
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
