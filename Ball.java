@@ -72,6 +72,7 @@ public class Ball extends Sprite implements Commons{
 		x = bar.getX()+bar.getWidth()/2-Commons.WIDTH/100;
 		y = bar.getY()-bar.getHeight()/2-Commons.WIDTH/100;
 		xmult = 0;
+		xdir = 1;
 		ymult = DEFAULT_YMULT;
 		ydir=-1;
 		

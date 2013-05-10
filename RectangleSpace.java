@@ -194,6 +194,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 	}
 
+	//modify xdir as little as possible to keep natural motion
+	
 	private void setBallMults(int col){
 		barD.setText("     " + col);
 		ball.setYDir(-1);
