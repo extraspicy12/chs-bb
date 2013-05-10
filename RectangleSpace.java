@@ -105,7 +105,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 6; j++) {
-                bricks.add(new Brick(j * Commons.WIDTH/10 + Commons.WIDTH/10+10, i * Commons.HEIGHT/25 + Commons.HEIGHT/25+10, Color.RED));
+                bricks.add(new Brick(j * Commons.WIDTH/10 + 10, i * Commons.HEIGHT/25 + Commons.HEIGHT/25+10, Color.RED));
             }
         }
 		
