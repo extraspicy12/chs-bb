@@ -36,9 +36,9 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private boolean paused = true;
 	private JButton pause;
 	private JMenuBar menu = new JMenuBar();
-	private JLabel lifeCounter, barD = new JLabel("    " + 0);
+	private JLabel lifeCounter;
 	private ArrayList<Brick> bricks;
-
+	
 	public RectangleSpace(JMenuBar menubar){
 		setLayout(new BorderLayout());
 		menu = menubar;
@@ -88,9 +88,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
-
-		menubar.add(barD);
-
+		
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -101,14 +99,21 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		setBounds(0,0, Commons.WIDTH, Commons.HEIGHT-100);
 
 		add(menu, BorderLayout.NORTH);
-
-
+		
+		
 		bricks = new ArrayList<Brick>();
-		Brick brick1 = new Brick(23, 57, Color.RED);
-		add(brick1);
-		bricks.add(brick1);
-
-
+		
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 6; j++) {
+                bricks.add(new Brick(j * Commons.WIDTH/10 + Commons.WIDTH/10, i * Commons.HEIGHT/25 + Commons.HEIGHT/25, Color.RED));
+            }
+        }
+		
+//		Brick brick1 = new Brick(20, 50, Color.RED);
+//		add(brick1);
+//		bricks.add(brick1);
+		
+		
 	}	
 
 	public void paintComponent(Graphics g){
@@ -116,7 +121,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		bar.paint(g);
 		ball.paint(g);
 		for(Brick b : bricks){
-			b.paint(g);
+			if(!b.isDestroyed())
+				b.paint(g);
 		}
 	}
 
@@ -182,34 +188,48 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		if (ball.getX() >= Commons.WIDTH - Commons.WIDTH/50) {
 			ball.setXDir(-1);
 		}
-		if (ball.getY() <= Commons.TOP) {
+		if (ball.getY() <= 0) {
 			ball.setYDir(1);
 		}  
 
 		if (ball.getY()>=bar.getY()-bar.getHeight() && (ball.getCenter() > bar.getX() && ball.getCenter() < bar.getX() + bar.getWidth())) {
-			setBallMults(Math.abs((bar.getX()+bar.getWidth())-ball.getX()));
+			ball.setYDir(-1);
+			setBallMults((int)bar.getRect().getMinX(), (int)ball.getRect().getMinX());
+		}
+		int k =0, hold=0;
+		boolean destroy=false;
+		for(Brick b : bricks){
+			if(b.getRect().intersects(ball.getRect())){
+				b.setDestroyed();
+				destroy = true;
+				ball.reverseYDir();
+				hold = k;
+			}
+			k++;
+		}
+		if(destroy){
+			bricks.remove(hold);
+			destroy = false;
 		}
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
 
 	}
-
-	//modify xdir as little as possible to keep natural motion
 	
-	private void setBallMults(int col){
-		barD.setText("     " + col);
-		ball.setYDir(-1);
+	private void setBallMults(int RectX, int BarX){
+
+		int col = BarX-RectX;
 		if(col <= bar.getWidth()/10){
 			ball.setXMult(11);
 			ball.setYMult(4);
-			ball.setXDir(1);
-			barD.setText("     " + 11 + 4 + 1);
+			ball.setXDir(-1);
+
 		}
 		else if(col <= 2*(bar.getWidth()/10)){
 			ball.setXMult(10);
 			ball.setYMult(7);
-			ball.setXDir(1);
-			barD.setText("     " + 10 + 7 + 1);
+			ball.setXDir(-1);
+
 		}
 		else if(col <= 3*(bar.getWidth()/10)){
 			ball.setXMult(9);
@@ -223,17 +243,11 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			ball.setXDir(-1);
 
 		}
-		else if(col <= 4.5*(bar.getWidth()/10)){
+		else if(col <= 5*(bar.getWidth()/10)){
 			ball.setXMult(4);
 			ball.setYMult(11);
 			ball.setXDir(-1);
 
-		}
-		else if(col <= 5.5*(bar.getWidth()/10)){
-			ball.setXMult(0);
-			ball.setYMult(11);
-			ball.setXDir(1);
-			barD.setText("     " + 4 + 11 + 1);
 		}
 		else if(col <= 6*(bar.getWidth()/10)){
 			ball.setXMult(4);
@@ -258,12 +272,14 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			ball.setXDir(1);
 
 		}
-		else if(col <= 10*(bar.getWidth()/10)){
+		else if(col <= bar.getWidth()){
 			ball.setXMult(11);
 			ball.setYMult(4);
-			ball.setXDir(-1);
-			barD.setText("     " + 11 + 4 + -1);
-		} else{
+			ball.setXDir(1);
+
+		}
+		
+		else{
 			ball.setXMult(7);
 			ball.setYMult(10);
 		}		

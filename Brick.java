@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 public class Brick extends Sprite implements Commons {
 
 	private Color BrickColor;
+	private boolean destroyed = false;
 	
 	public Brick(int xPos, int yPos, Color color){
 		height = Commons.HEIGHT/25;
@@ -24,6 +25,14 @@ public class Brick extends Sprite implements Commons {
 	
 	public Rectangle getRect(){
 		return new Rectangle(x, y, width, height);
+	}
+
+	public void setDestroyed(){
+		destroyed = true;
+	}
+	
+	public boolean isDestroyed(){
+		return destroyed;
 	}
 	
 }
