@@ -36,7 +36,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private boolean paused = true;
 	private JButton pause;
 	private JMenuBar menu = new JMenuBar();
-	private JLabel lifeCounter, barD = new JLabel("    " + 0);
+	private JLabel lifeCounter;
 	private ArrayList<Brick> bricks;
 	
 	public RectangleSpace(JMenuBar menubar){
@@ -89,8 +89,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
 		
-		menubar.add(barD);
-		
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -104,9 +102,16 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		
 		
 		bricks = new ArrayList<Brick>();
-		Brick brick1 = new Brick(23, 57, Color.RED);
-		add(brick1);
-		bricks.add(brick1);
+		
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 6; j++) {
+                bricks.add(new Brick(j * Commons.WIDTH/10 + Commons.WIDTH/10, i * Commons.HEIGHT/25 + Commons.HEIGHT/25, Color.RED));
+            }
+        }
+		
+//		Brick brick1 = new Brick(20, 50, Color.RED);
+//		add(brick1);
+//		bricks.add(brick1);
 		
 		
 	}	
@@ -116,7 +121,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		bar.paint(g);
 		ball.paint(g);
 		for(Brick b : bricks){
-			b.paint(g);
+			if(!b.isDestroyed())
+				b.paint(g);
 		}
 	}
 
@@ -190,13 +196,28 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			ball.setYDir(-1);
 			setBallMults((int)bar.getRect().getMinX(), (int)ball.getRect().getMinX());
 		}
+		int k =0, hold=0;
+		boolean destroy=false;
+		for(Brick b : bricks){
+			if(b.getRect().intersects(ball.getRect())){
+				b.setDestroyed();
+				destroy = true;
+				ball.reverseYDir();
+				hold = k;
+			}
+			k++;
+		}
+		if(destroy){
+			bricks.remove(hold);
+			destroy = false;
+		}
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
 
 	}
 	
 	private void setBallMults(int RectX, int BarX){
-		barD.setText("     " + RectX + "   " + BarX + "   " + bar.getWidth());
+
 		int col = BarX-RectX;
 		if(col <= bar.getWidth()/10){
 			ball.setXMult(11);
