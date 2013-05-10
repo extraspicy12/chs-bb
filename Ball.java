@@ -51,6 +51,11 @@ public class Ball extends Sprite implements Commons{
 		ydir*=-1;
 	}
 	
+	public void reverseXDir(){
+		xdir*=-1;
+	}
+	
+	
 	public double getXMult(){
 		return xmult;
 	}
