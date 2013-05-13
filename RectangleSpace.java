@@ -2,7 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+
 //use commons to set size
 
 
@@ -38,7 +43,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private JMenuBar menu = new JMenuBar();
 	private JLabel lifeCounter;
 	private ArrayList<Brick> bricks;
-	
+	private String message = "Game Over";
+
 	public RectangleSpace(JMenuBar menubar){
 		setLayout(new BorderLayout());
 		menu = menubar;
@@ -88,7 +94,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 		lifeCounter = new JLabel("  Lives: " + lives);
 		menubar.add(lifeCounter);
-		
+
 		color = Color.WHITE;
 		setOpaque(true);
 		bar =  new Bar();
@@ -99,30 +105,39 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		setBounds(0,0, Commons.WIDTH, Commons.HEIGHT-100);
 
 		add(menu, BorderLayout.NORTH);
-		
-		
+
+
 		bricks = new ArrayList<Brick>();
-		
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                bricks.add(new Brick(j * Commons.WIDTH/10 + 10, i * Commons.HEIGHT/25 + Commons.HEIGHT/25+10, Color.RED));
-            }
-        }
-		
-//		Brick brick1 = new Brick(20, 50, Color.RED);
-//		add(brick1);
-//		bricks.add(brick1);
-		
-		
+
+		for (int i = 0; i < 20; i+=3) {
+			for (int j = 0; j < 19; j+=3) {
+				bricks.add(new Brick(j * Commons.WIDTH/20 + 10, i * Commons.HEIGHT/50 + Commons.HEIGHT/25 +10, Color.RED));
+			}
+		}
+
+		//		Brick brick1 = new Brick(20, 50, Color.RED);
+		//		add(brick1);
+		//		bricks.add(brick1);
+
+
 	}	
 
 	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		bar.paint(g);
-		ball.paint(g);
-		for(Brick b : bricks){
-			if(!b.isDestroyed())
-				b.paint(g);
+		if(gameOver){
+			 Font font = new Font("Verdana", Font.BOLD, 80);
+	            FontMetrics metr = this.getFontMetrics(font);
+	            g.setColor(Color.BLACK);
+	            g.setFont(font);
+	            g.drawString(message, (Commons.WIDTH - metr.stringWidth(message)) / 2, Commons.HEIGHT / 2);
+		}
+		else{
+			super.paintComponent(g);
+			bar.paint(g);
+			ball.paint(g);
+			for(Brick b : bricks){
+				if(!b.isDestroyed())
+					b.paint(g);
+			}
 		}
 	}
 
@@ -133,8 +148,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private void loseALife(){
 		if (lives >= 1)
 			lives--;
-		else
-			newGame();
+//		else
+//			newGame();
 	}
 
 	private void newGame(){
@@ -202,10 +217,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			if(b.getRect().intersects(ball.getRect())){
 				b.setDestroyed();
 				destroy = true;
-				ball.reverseYDir();
+				reverseEm(b.getRect(), ball.getRect());
 				hold = k;
-				if(ball.getXMult() > 4*ball.getYMult())
-					ball.reverseXDir();
 			}
 			k++;
 		}
@@ -216,6 +229,34 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
 
+	}
+
+	private void reverseEm(Rectangle brickRect, Rectangle ballRect){
+		int ballLeft = (int)ball.getRect().getMinX();
+        int ballHeight = (int)ball.getRect().getHeight();
+        int ballWidth = (int)ball.getRect().getWidth();
+        int ballTop = (int)ball.getRect().getMinY();
+
+        Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+        Point pointLeft = new Point(ballLeft - 1, ballTop);
+        Point pointTop = new Point(ballLeft, ballTop - 1);
+        Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+
+            if (brickRect.contains(pointRight)) {
+                ball.reverseXDir();
+            }
+
+            else if (brickRect.contains(pointLeft)) {
+            	ball.reverseXDir();
+            }
+
+            if (brickRect.contains(pointTop)) {
+            	ball.reverseYDir();
+            }
+
+            else if (brickRect.contains(pointBottom)) {
+            	ball.reverseYDir();
+            }
 	}
 	
 	private void setBallMults(int RectX, int BarX){
@@ -280,7 +321,7 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			ball.setXDir(1);
 
 		}
-		
+
 		else{
 			ball.setXMult(7);
 			ball.setYMult(10);
@@ -290,6 +331,13 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	class ScheduleTask extends TimerTask {
 
 		public void run() {
+			if (bricks.size() == 0){
+				gameOver=true;
+				message = "Congratulations";
+			}
+//			if (lives == 0){
+//				gameOver = true;
+//			}
 			if (mouseX <= Commons.WIDTH/16)
 				bar.move(0);
 			else if (mouseX >= Commons.WIDTH*(15.0/16.0))
