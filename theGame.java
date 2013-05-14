@@ -22,7 +22,6 @@ public class theGame extends JFrame{
 	
 		JMenuBar menubar = new JMenuBar();
 		
-	
 		space = new RectangleSpace(menubar);
 		
 		Content.add(space, BorderLayout.CENTER);

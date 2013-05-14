@@ -44,6 +44,12 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
     			if (stick)
     				stick = false;
     		}
+    		if (keyCode==KeyEvent.VK_SPACE){
+    			if (paused)
+    				unPause();
+    			else
+    				pause();
+    		}
             return false;
         }
 	
