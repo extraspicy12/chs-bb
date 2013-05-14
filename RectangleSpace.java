@@ -5,11 +5,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -31,13 +35,26 @@ import javax.swing.JPanel;
 
 
 public class RectangleSpace extends JPanel implements Commons, MouseMotionListener {
+
+    private class MyDispatcher implements KeyEventDispatcher {
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+    		int keyCode = e.getKeyCode();
+    		if(keyCode==KeyEvent.VK_DOWN){
+    			if (stick)
+    				stick = false;
+    		}
+            return false;
+        }
+	
+    }
 	private Color color;
 	private Dimension dim;
 	private Bar bar;
 	private Ball ball;
 	private Timer timer;
 	private int mouseX, lives = 3;
-	private boolean gameOver, stick=false;
+	private boolean gameOver, stick=true;
 	private boolean paused = true;
 	private JButton pause;
 	private JMenuBar menu = new JMenuBar();
@@ -46,6 +63,9 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private String message = "Game Over";
 
 	public RectangleSpace(JMenuBar menubar){
+		
+      KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+      manager.addKeyEventDispatcher(new MyDispatcher());
 		setLayout(new BorderLayout());
 		menu = menubar;
 
@@ -58,12 +78,10 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				if(!paused){
 					pause();
 					pause.setText("Unpause");
-					stick = false;
 				}
 				else{
 					unPause();
 					pause.setText("Pause");
-					stick = false;
 				}
 			}
 		});
@@ -83,8 +101,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				System.exit(0);
 			}
 		});
-
-
 
 		game.add(newGame);
 		game.add(exit);
@@ -124,11 +140,11 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 	public void paintComponent(Graphics g){
 		if(gameOver){
-			 Font font = new Font("Verdana", Font.BOLD, 80);
-	            FontMetrics metr = this.getFontMetrics(font);
-	            g.setColor(Color.BLACK);
-	            g.setFont(font);
-	            g.drawString(message, (Commons.WIDTH - metr.stringWidth(message)) / 2, Commons.HEIGHT / 2);
+			Font font = new Font("Verdana", Font.BOLD, 80);
+			FontMetrics metr = this.getFontMetrics(font);
+			g.setColor(Color.BLACK);
+			g.setFont(font);
+			g.drawString(message, (Commons.WIDTH - metr.stringWidth(message)) / 2, Commons.HEIGHT / 2);
 		}
 		else{
 			super.paintComponent(g);
@@ -148,8 +164,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	private void loseALife(){
 		if (lives >= 1)
 			lives--;
-//		else
-//			newGame();
+		//		else
+		//			newGame();
 	}
 
 	private void newGame(){
@@ -167,7 +183,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		pause.setText("Restart");
 		loseALife();
 		lifeCounter.setText("  Lives: " + lives);
-		pause();
 	}
 
 	public void mouseDragged(MouseEvent e) {}
@@ -186,7 +201,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ScheduleTask(), 10, 10);
 		paused = false;
-		stick = false;
 	}
 
 	public boolean isGameOver(){
@@ -233,32 +247,32 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 
 	private void reverseEm(Rectangle brickRect, Rectangle ballRect){
 		int ballLeft = (int)ball.getRect().getMinX();
-        int ballHeight = (int)ball.getRect().getHeight();
-        int ballWidth = (int)ball.getRect().getWidth();
-        int ballTop = (int)ball.getRect().getMinY();
+		int ballHeight = (int)ball.getRect().getHeight();
+		int ballWidth = (int)ball.getRect().getWidth();
+		int ballTop = (int)ball.getRect().getMinY();
 
-        Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-        Point pointLeft = new Point(ballLeft - 1, ballTop);
-        Point pointTop = new Point(ballLeft, ballTop - 1);
-        Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+		Point pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+		Point pointLeft = new Point(ballLeft - 1, ballTop);
+		Point pointTop = new Point(ballLeft, ballTop - 1);
+		Point pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
 
-            if (brickRect.contains(pointRight)) {
-                ball.reverseXDir();
-            }
+		if (brickRect.contains(pointRight)) {
+			ball.reverseXDir();
+		}
 
-            else if (brickRect.contains(pointLeft)) {
-            	ball.reverseXDir();
-            }
+		else if (brickRect.contains(pointLeft)) {
+			ball.reverseXDir();
+		}
 
-            if (brickRect.contains(pointTop)) {
-            	ball.reverseYDir();
-            }
+		if (brickRect.contains(pointTop)) {
+			ball.reverseYDir();
+		}
 
-            else if (brickRect.contains(pointBottom)) {
-            	ball.reverseYDir();
-            }
+		else if (brickRect.contains(pointBottom)) {
+			ball.reverseYDir();
+		}
 	}
-	
+
 	private void setBallMults(int RectX, int BarX){
 
 		int col = BarX-RectX;
@@ -335,9 +349,9 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				gameOver=true;
 				message = "Congratulations";
 			}
-//			if (lives == 0){
-//				gameOver = true;
-//			}
+			if (lives == 0){
+				gameOver = true;
+			}
 			if (mouseX <= Commons.WIDTH/16)
 				bar.move(0);
 			else if (mouseX >= Commons.WIDTH*(15.0/16.0))
@@ -346,7 +360,8 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 				bar.move(mouseX-Commons.WIDTH/16);
 			checkCollision();
 			if(stick){
-				ball.setPosition(bar.getX()+bar.getWidth()/2-Commons.WIDTH/100);
+				ball.setX(bar.getX()+bar.getWidth()/2-Commons.WIDTH/100);
+				ball.setY(bar.getY()-bar.getHeight()/2-Commons.WIDTH/100);
 			}
 			else
 				ball.move();
