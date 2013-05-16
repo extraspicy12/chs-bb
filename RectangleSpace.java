@@ -35,6 +35,19 @@ import javax.swing.JPanel;
 
 
 public class RectangleSpace extends JPanel implements Commons, MouseMotionListener {
+	private Color color;
+	private Dimension dim;
+	private Bar bar;
+	private Ball ball;
+	private Timer timer;
+	private int mouseX, lives = 3;
+	private boolean gameOver, stick=true;
+	private boolean paused = true;
+	private JButton pause;
+	private JMenuBar menu = new JMenuBar();
+	private JLabel lifeCounter;
+	private ArrayList<Brick> bricks;
+	private String message = "Game Over";
 
     private class MyDispatcher implements KeyEventDispatcher {
         @Override
@@ -54,20 +67,6 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
         }
 	
     }
-	private Color color;
-	private Dimension dim;
-	private Bar bar;
-	private Ball ball;
-	private Timer timer;
-	private int mouseX, lives = 3;
-	private boolean gameOver, stick=true;
-	private boolean paused = true;
-	private JButton pause;
-	private JMenuBar menu = new JMenuBar();
-	private JLabel lifeCounter;
-	private ArrayList<Brick> bricks;
-	private String message = "Game Over";
-
 	public RectangleSpace(JMenuBar menubar){
 		
       KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
@@ -175,14 +174,31 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 	}
 
 	private void newGame(){
+		gameOver = false;
+		remove(bar);
+		remove(ball);
+		bricks = new ArrayList<Brick>();
 		lives = 3;
 		lifeCounter.setText("  Lives: " + lives);
 		ball.resetState(bar);
 		pause();
 		pause.setText("Start");
+		
+		for (int i = 0; i < 20; i+=3) {
+			for (int j = 0; j < 19; j+=3) {
+				bricks.add(new Brick(j * Commons.WIDTH/20 + 10, i * Commons.HEIGHT/50 + Commons.HEIGHT/25 +10, Color.RED));
+			}
+		}
+		
+		bar = new Bar();
+		ball = new Ball(bar);
+		add(bar);
+		add(ball);
+		repaint();
 		//clear score too 
 		//remake bricks
 	}	
+	
 	private void resetGame(){
 		ball.resetState(bar);
 		stick = true;
@@ -231,20 +247,29 @@ public class RectangleSpace extends JPanel implements Commons, MouseMotionListen
 			ball.setYDir(-1);
 			setBallMults((int)bar.getRect().getMinX(), (int)ball.getRect().getMinX());
 		}
-		int k =0, hold=0;
-		boolean destroy=false;
+		int k =0, hold=0, hold2 = 0;
+		boolean destroy=false, destroy2 = false;
 		for(Brick b : bricks){
 			if(b.getRect().intersects(ball.getRect())){
 				b.setDestroyed();
+				if (destroy)
+					destroy2 = true;
 				destroy = true;
 				reverseEm(b.getRect(), ball.getRect());
-				hold = k;
+				if (destroy && !destroy2)
+					hold = k;
+				else if (destroy2)
+					hold2 = k;
 			}
 			k++;
 		}
 		if(destroy){
 			bricks.remove(hold);
 			destroy = false;
+		}
+		else if(destroy2){
+			bricks.remove(hold2);
+			destroy2 = false;
 		}
 		//collision checking time below 
 		//compare x and y coords and width/radius to see if intersecting
